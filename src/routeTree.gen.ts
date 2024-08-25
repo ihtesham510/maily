@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthMailsImport } from './routes/_auth/mails'
+import { Route as AuthMailsInboxImport } from './routes/_auth/mails/inbox'
 
 // Create/Update Routes
 
@@ -30,6 +31,11 @@ const IndexRoute = IndexImport.update({
 const AuthMailsRoute = AuthMailsImport.update({
   path: '/mails',
   getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthMailsInboxRoute = AuthMailsInboxImport.update({
+  path: '/inbox',
+  getParentRoute: () => AuthMailsRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -57,6 +63,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthMailsImport
       parentRoute: typeof AuthImport
     }
+    '/_auth/mails/inbox': {
+      id: '/_auth/mails/inbox'
+      path: '/inbox'
+      fullPath: '/mails/inbox'
+      preLoaderRoute: typeof AuthMailsInboxImport
+      parentRoute: typeof AuthMailsImport
+    }
   }
 }
 
@@ -64,7 +77,9 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
-  AuthRoute: AuthRoute.addChildren({ AuthMailsRoute }),
+  AuthRoute: AuthRoute.addChildren({
+    AuthMailsRoute: AuthMailsRoute.addChildren({ AuthMailsInboxRoute }),
+  }),
 })
 
 /* prettier-ignore-end */
@@ -90,7 +105,14 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_auth/mails": {
       "filePath": "_auth/mails.tsx",
-      "parent": "/_auth"
+      "parent": "/_auth",
+      "children": [
+        "/_auth/mails/inbox"
+      ]
+    },
+    "/_auth/mails/inbox": {
+      "filePath": "_auth/mails/inbox.tsx",
+      "parent": "/_auth/mails"
     }
   }
 }

@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { Mail, mails } from './components/Mail/data'
 type Theme = 'light' | 'dark'
 interface ThemeStoreType {
 	theme: Theme
@@ -13,4 +14,23 @@ export const useThemeStore = create<ThemeStoreType>()(set => ({
 		set(state => ({
 			theme: state.theme === 'dark' ? 'light' : 'dark',
 		})),
+}))
+
+interface TypeQueryStore {
+	search: string
+	setSearch: (query: string) => void
+}
+
+export const useQueryStore = create<TypeQueryStore>()(set => ({
+	search: '',
+	setSearch: query => set({ search: query }),
+}))
+
+interface MailStore {
+	mails: Mail[]
+	setMails: (mails: Mail[]) => void
+}
+export const useMailStore = create<MailStore>()(set => ({
+	mails: mails,
+	setMails: mails => set({ mails: mails }),
 }))
