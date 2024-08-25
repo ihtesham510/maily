@@ -9,13 +9,17 @@ import {
 } from '@/components/ui/tooltip'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useMailStore } from '@/store'
+import ReplyBox from './ReplyBox'
+import NoMailSelected from './NoMailSelected'
 
 const MailDisplay = () => {
 	const { id } = useParams()
+	const [isOpen, setIsOpen] = useState(false)
 	const { mails, setMails } = useMailStore()
 	const mail = mails.find(mail => mail.id == id)
+
 	useEffect(() => {
 		return () => {
 			if (mail && !mail.read) {
@@ -24,6 +28,10 @@ const MailDisplay = () => {
 			}
 		}
 	}, [mail, setMails, mails])
+
+	if (!id) {
+		return <NoMailSelected />
+	}
 	return (
 		<>
 			<div className='h-[7vh] justify-between items-center flex w-full'>
@@ -66,7 +74,11 @@ const MailDisplay = () => {
 					<TooltipProvider>
 						<Tooltip>
 							<TooltipTrigger asChild>
-								<Button variant='ghost' size='icon'>
+								<Button
+									variant='ghost'
+									onClick={() => setIsOpen(prev => !prev)}
+									size='icon'
+								>
 									<Reply className='h-4 w-4' />
 									<span className='sr-only'>Reply</span>
 								</Button>
@@ -111,14 +123,17 @@ const MailDisplay = () => {
 				</div>
 			</div>
 			<Separator />
-			<div className='m-6'>
-				{mail &&
-					mail.text &&
-					mail.text
-						.split('\n')
-						.map(sentence => (
-							<p className='m-1 my-3 text-sm font-semibold'>{sentence}</p>
+			<div className='flex flex-col justify-between h-[80vh]'>
+				<div className='m-6'>
+					{mail &&
+						mail.text &&
+						mail.text.split('\n').map((sentence, index) => (
+							<p key={index} className='m-1 my-2 text-sm font-semibold'>
+								{sentence}
+							</p>
 						))}
+				</div>
+				<ReplyBox open={isOpen} />
 			</div>
 		</>
 	)

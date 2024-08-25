@@ -8,8 +8,8 @@ import { ComponentProps } from 'react'
 const MailList = (props: { mails: Mail[] }) => {
 	return (
 		<div>
-			{props.mails.map(mail => (
-				<Mail mail={mail} />
+			{props.mails.map((mail, index) => (
+				<Mail key={index} mail={mail} />
 			))}
 		</div>
 	)

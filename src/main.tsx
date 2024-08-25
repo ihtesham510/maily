@@ -32,6 +32,7 @@ createRoot(document.getElementById('root')!).render(
 						}
 					>
 						<Route path='inbox' element={<Inbox />}>
+							<Route index element={<MailDisplay />} />
 							<Route path=':id' element={<MailDisplay />} />
 						</Route>
 						<Route path='drafts'>

@@ -20,7 +20,7 @@ export interface TypeNavProps {
 	}[]
 }
 
-export default function MailNav({ links, isCollapsed }: TypeNavProps) {
+export default function Nav({ links, isCollapsed }: TypeNavProps) {
 	return (
 		<div
 			data-collapsed={isCollapsed}

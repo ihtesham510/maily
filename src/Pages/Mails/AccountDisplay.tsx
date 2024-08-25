@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from '@/components/ui/button'
-import { Skeleton } from '../ui/skeleton'
+import { Skeleton } from '../../components/ui/skeleton'
 import { User, useUser } from '@/Hooks/useUser'
 import {
 	Popover,

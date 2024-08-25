@@ -1,5 +1,5 @@
-import AccountDisplay from '@/components/Mail/AccountDisplay'
-import MailNav from '@/components/Mail/MailNav'
+import AccountDisplay from './AccountDisplay'
+import Nav from './Nav'
 import {
 	ResizableHandle,
 	ResizablePanel,
@@ -40,7 +40,7 @@ export default function Mails() {
 				>
 					<AccountDisplay collapsed={isCollapsed} />
 					<Separator className='my-2' />
-					<MailNav
+					<Nav
 						isCollapsed={isCollapsed}
 						links={[
 							{
