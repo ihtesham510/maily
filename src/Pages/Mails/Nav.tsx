@@ -1,5 +1,4 @@
 import { LucideIcon } from 'lucide-react'
-import { Link } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 import {
@@ -8,6 +7,7 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { type TypeRoutes, useMailNavigation } from '@/Hooks/useMailNavigation'
 
 export interface TypeNavProps {
 	isCollapsed: boolean
@@ -15,12 +15,13 @@ export interface TypeNavProps {
 		title: string
 		label?: string
 		icon: LucideIcon
-		variant: 'default' | 'ghost'
-		to: string
+		variant?: 'default' | 'ghost'
+		to: TypeRoutes
 	}[]
 }
 
 export default function Nav({ links, isCollapsed }: TypeNavProps) {
+	const navigate = useMailNavigation()
 	return (
 		<div
 			data-collapsed={isCollapsed}
@@ -32,8 +33,8 @@ export default function Nav({ links, isCollapsed }: TypeNavProps) {
 						<TooltipProvider key={index}>
 							<Tooltip key={index} delayDuration={0}>
 								<TooltipTrigger asChild>
-									<Link
-										to={link.to}
+									<button
+										onClick={() => navigate(link.to)}
 										className={cn(
 											buttonVariants({ variant: link.variant, size: 'icon' }),
 											'h-9 w-9',
@@ -43,7 +44,7 @@ export default function Nav({ links, isCollapsed }: TypeNavProps) {
 									>
 										<link.icon className='h-4 w-4' />
 										<span className='sr-only'>{link.title}</span>
-									</Link>
+									</button>
 								</TooltipTrigger>
 								<TooltipContent
 									side='right'
@@ -59,9 +60,9 @@ export default function Nav({ links, isCollapsed }: TypeNavProps) {
 							</Tooltip>
 						</TooltipProvider>
 					) : (
-						<Link
+						<button
 							key={index}
-							to={link.to}
+							onClick={() => navigate(link.to)}
 							className={cn(
 								buttonVariants({ variant: link.variant, size: 'sm' }),
 								link.variant === 'default' &&
@@ -82,7 +83,7 @@ export default function Nav({ links, isCollapsed }: TypeNavProps) {
 									{link.label}
 								</span>
 							)}
-						</Link>
+						</button>
 					),
 				)}
 			</nav>

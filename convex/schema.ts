@@ -29,6 +29,7 @@ export default defineSchema({
 		}),
 		labels: v.array(v.string()),
 	})
-		.index('by_userId', ['to.userId', 'from.userId'])
+		.index('by_inbox', ['to.userId', 'to.email', 'to.name'])
+		.index('by_sent', ['from.userId', 'from.email', 'from.name'])
 		.index('by_email', ['to.email', 'from.email']),
 })

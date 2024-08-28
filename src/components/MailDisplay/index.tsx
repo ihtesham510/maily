@@ -1,4 +1,5 @@
 import { useParams } from 'react-router'
+import { formatDate } from '@/lib/date'
 import { Separator } from '@/components/ui/separator'
 import { Trash2, Archive, ArchiveX, Forward, Reply } from 'lucide-react'
 import {
@@ -13,21 +14,15 @@ import { useEffect, useState } from 'react'
 import { useMailStore } from '@/store'
 import ReplyBox from './ReplyBox'
 import NoMailSelected from './NoMailSelected'
+import { useMail } from '@/Hooks/useMail'
 
 const MailDisplay = () => {
 	const { id } = useParams()
 	const [isOpen, setIsOpen] = useState(false)
-	const { mails, setMails } = useMailStore()
-	const mail = mails.find(mail => mail.id == id)
+	const { inboxMails } = useMail()
+	const mail = inboxMails?.find(mail => mail._id === id)
 
-	useEffect(() => {
-		return () => {
-			if (mail && !mail.read) {
-				const updatedMail = { ...mail, read: true }
-				setMails(mails.map(m => (m.id === mail.id ? updatedMail : m)))
-			}
-		}
-	}, [mail, setMails, mails])
+	useEffect(() => {}, [mail])
 
 	if (!id) {
 		return <NoMailSelected />
@@ -109,16 +104,16 @@ const MailDisplay = () => {
 				</div>
 				<div className='size-full'>
 					<div className='w-full h-max mt-[14px] flex justify-between items-center'>
-						<h1 className='text-md font-bold'>{mail?.name}</h1>
+						<h1 className='text-md font-bold'>{mail?.from.name}</h1>
 						<p className='text-xs font-semibold text-primary/55 mr-4'>
-							{mail?.date}
+							{mail && formatDate(mail._creationTime)}
 						</p>
 					</div>
 					<h1 className='text-xs font-semibold text-primary/75'>
 						{mail?.subject}
 					</h1>
 					<h1 className='text-xs font-semibold text-primary/75'>
-						{mail?.email}
+						{mail?.from.email}
 					</h1>
 				</div>
 			</div>

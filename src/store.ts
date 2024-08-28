@@ -34,3 +34,17 @@ export const useMailStore = create<MailStore>()(set => ({
 	mails: mails,
 	setMails: mails => set({ mails: mails }),
 }))
+interface PanelStore {
+	p1: number
+	p2: number
+	setPanel1: (value: number) => void
+	setPanel2: (value: number) => void
+}
+const panel1 = Number(localStorage.getItem('panel1') ?? 50)
+const panel2 = Number(localStorage.getItem('panel2') ?? 50)
+export const usePanelStore = create<PanelStore>()(set => ({
+	p1: panel1,
+	p2: panel2,
+	setPanel1: value => set(state => ({ ...state, p1: value })),
+	setPanel2: value => set(state => ({ ...state, p2: value })),
+}))

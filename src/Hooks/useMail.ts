@@ -1,15 +1,15 @@
-import { atom, useAtom } from 'jotai'
+import { api } from '@convex/_generated/api'
+import { useQuery } from 'convex/react'
 
-import { Mail, mails } from '@/components/Mail/data'
+const useGetInboxMails = () => useQuery(api.mails.getInboxEmails)
+const useGetSentMails = () => useQuery(api.mails.getSentEmails)
 
-type Config = {
-	selected: Mail['id'] | null
-}
-
-const configAtom = atom<Config>({
-	selected: mails[0].id,
-})
+type InboxMails = ReturnType<typeof useGetInboxMails>
+type NonUndefined<T> = T extends undefined ? never : T
+export type Mail = NonUndefined<InboxMails> extends (infer U)[] ? U : never
 
 export function useMail() {
-	return useAtom(configAtom)
+	const inboxMails = useGetInboxMails()
+	const sentMails = useGetSentMails()
+	return { inboxMails, sentMails }
 }

@@ -1,13 +1,25 @@
 import { ConvexError, v } from 'convex/values'
 import { mutation, MutationCtx, query, QueryCtx } from './_generated/server'
 
-export const getEmails = query({
+export const getInboxEmails = query({
 	async handler(ctx) {
 		const user = await getUserData(ctx)
 		if (!user) throw new ConvexError('User not found')
 		return await ctx.db
 			.query('email')
-			.withIndex('by_userId', q => q.eq('to.userId', user._id))
+			.withIndex('by_inbox', q => q.eq('to.userId', user._id))
+			.order('desc')
+			.collect()
+	},
+})
+
+export const getSentEmails = query({
+	async handler(ctx) {
+		const user = await getUserData(ctx)
+		if (!user) throw new ConvexError('User not found')
+		return await ctx.db
+			.query('email')
+			.withIndex('by_sent', q => q.eq('from.userId', user._id))
 			.order('desc')
 			.collect()
 	},

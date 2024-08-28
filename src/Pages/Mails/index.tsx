@@ -6,7 +6,15 @@ import {
 	ResizablePanelGroup,
 } from '@/components/ui/resizable'
 import { Separator } from '@/components/ui/separator'
-import { Inbox, Send, ArchiveX, Trash2, Archive, FileIcon } from 'lucide-react'
+import {
+	Inbox,
+	Send,
+	ArchiveX,
+	Trash2,
+	Archive,
+	FileIcon,
+	PlusSquareIcon,
+} from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 import { Outlet, useLocation } from 'react-router'
@@ -39,6 +47,17 @@ export default function Mails() {
 					minSize={3}
 				>
 					<AccountDisplay collapsed={isCollapsed} />
+					<Separator className='my-2' />
+					<Nav
+						isCollapsed={isCollapsed}
+						links={[
+							{
+								title: 'New',
+								icon: PlusSquareIcon,
+								to: 'new',
+							},
+						]}
+					/>
 					<Separator className='my-2' />
 					<Nav
 						isCollapsed={isCollapsed}

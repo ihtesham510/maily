@@ -9,15 +9,22 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Input } from '@/components/ui/input'
 import { Search } from 'lucide-react'
-import { useMailStore } from '@/store'
-import MailList from './MailList'
+import MailList from '@/components/MailList'
+import { useMail } from '@/Hooks/useMail'
+import { usePanels } from '@/Hooks/usePanels'
 
 const Inbox = () => {
-	const { mails } = useMailStore()
+	const { p1, p2, setPanel1, setPanel2 } = usePanels()
+	const { inboxMails } = useMail()
 	return (
 		<>
 			<ResizablePanelGroup direction='horizontal'>
-				<ResizablePanel defaultSize={50} minSize={30} maxSize={70}>
+				<ResizablePanel
+					defaultSize={p1}
+					onResize={e => setPanel1(e)}
+					minSize={30}
+					maxSize={70}
+				>
 					<Tabs defaultValue='all'>
 						<div className='h-[7vh] flex justify-between items-center'>
 							<h1 className='text-3xl font-bold ml-4'>Inbox</h1>
@@ -33,18 +40,23 @@ const Inbox = () => {
 						</div>
 						<TabsContent value='all'>
 							<ScrollArea className='w-auto h-[93vh]'>
-								<MailList mails={mails} />
+								<MailList mails={inboxMails} />
 							</ScrollArea>
 						</TabsContent>
 						<TabsContent value='unread'>
 							<ScrollArea className='w-auto h-[92vh]'>
-								<MailList mails={mails.filter(m => !m.read)} />
+								<MailList mails={inboxMails?.filter(m => !m.read)} />
 							</ScrollArea>
 						</TabsContent>
 					</Tabs>
 				</ResizablePanel>
 				<ResizableHandle withHandle />
-				<ResizablePanel defaultSize={50} minSize={40} maxSize={70}>
+				<ResizablePanel
+					defaultSize={p2}
+					onResize={e => setPanel2(e)}
+					minSize={40}
+					maxSize={70}
+				>
 					<Outlet />
 				</ResizablePanel>
 			</ResizablePanelGroup>
