@@ -30,6 +30,8 @@ http.route({
 						first_name: result.data.first_name as string,
 						last_name: result.data.last_name ?? undefined,
 						image_url: result.data.image_url,
+						email: result.data.email_addresses[0].email_address,
+						tokenidentifier: `https://${process.env.CLERK_JWT_ISSUER_DOMAIN}|${result.data.id}`,
 					})
 					break
 				case 'user.updated':
@@ -38,6 +40,8 @@ http.route({
 						first_name: result.data.first_name as string,
 						last_name: result.data.last_name ?? undefined,
 						image_url: result.data.image_url,
+						email: result.data.email_addresses[0].email_address,
+						tokenidentifier: `https://${process.env.CLERK_JWT_ISSUER_DOMAIN}|${result.data.id}`,
 					})
 					break
 				case 'user.deleted':

@@ -2,9 +2,16 @@ import { ConvexError, v } from 'convex/values'
 import { internalMutation, query } from './_generated/server'
 
 export const getUserIdentity = query({
-	args: {},
-	handler: async (ctx, args) => {
-		return await ctx.auth.getUserIdentity()
+	handler: async ctx => {
+		const identity = await ctx.auth.getUserIdentity()
+		if (!identity) throw new ConvexError('User must be logged in')
+		const user = await ctx.db
+			.query('users')
+			.withIndex('by_tokenidentifier', q =>
+				q.eq('tokenidentifier', identity.tokenIdentifier),
+			)
+			.first()
+		return { ...identity, dbUserData: user }
 	},
 })
 
@@ -14,6 +21,8 @@ export const createUser = internalMutation({
 		first_name: v.string(),
 		last_name: v.optional(v.string()),
 		image_url: v.optional(v.string()),
+		email: v.string(),
+		tokenidentifier: v.string(),
 	},
 	handler: async (ctx, args) => {
 		return await ctx.db.insert('users', { ...args })
@@ -26,6 +35,8 @@ export const updateUser = internalMutation({
 		first_name: v.string(),
 		last_name: v.optional(v.string()),
 		image_url: v.optional(v.string()),
+		tokenidentifier: v.string(),
+		email: v.string(),
 	},
 	handler: async (ctx, args) => {
 		const user = await ctx.db

@@ -16,6 +16,7 @@ import type {
 } from "convex/server";
 import type * as clerk from "../clerk.js";
 import type * as http from "../http.js";
+import type * as mails from "../mails.js";
 import type * as user from "../user.js";
 
 /**
@@ -29,6 +30,7 @@ import type * as user from "../user.js";
 declare const fullApi: ApiFromModules<{
   clerk: typeof clerk;
   http: typeof http;
+  mails: typeof mails;
   user: typeof user;
 }>;
 export declare const api: FilterApi<
